@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button (click)="stepBack()">Back </ion-button>
+    <ion-title>LOGIN FORM</ion-title>
+    <span>step: {{steps}}</span>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="steps == 0">
+  <ion-item>
+    <ion-label position="floating">
+      Enter your username (5 chars min)
+    </ion-label>
+    <ion-input type="name" minlength="5" [(ngModel)]="name"></ion-input>
+  </ion-item>
+
+  <ion-button (click)="setUserName()"> Next</ion-button>
+  <ion-button (click)="getUser()"> getUser</ion-button>
+</ion-content>
+
+<ion-content *ngIf="steps == 1">
+  <ion-list>
+    <ion-list-header>Welcome {{name}}</ion-list-header>
+    <ion-button> ACCESS CHAT</ion-button>
+  </ion-list>
+</ion-content>
