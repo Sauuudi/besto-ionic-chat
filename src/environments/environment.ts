@@ -3,7 +3,16 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+   firebaseConfig : {
+    apiKey: 'AIzaSyDI33E_BE5SmNW2L0b0D3guMdRkORawto0',
+    authDomain: 'besto-ionic-chat.firebaseapp.com',
+    projectId: 'besto-ionic-chat',
+    storageBucket: 'besto-ionic-chat.appspot.com',
+    messagingSenderId: '637992742621',
+    appId: '1:637992742621:web:f0ee616504e6a1f90ff534',
+  }
 };
 
 /*
