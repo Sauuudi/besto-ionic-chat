@@ -1,7 +1,10 @@
+<ion-header>
+  <ion-title>BESTO CHAT</ion-title>
+</ion-header>
 
 
-<ion-button (click)="navigation.goBack()">Back </ion-button>
 <ion-content *ngIf="!showAccessButton">
+  <ion-button (click)="navigation.goBack()">Back </ion-button>
   <ion-item>
     <ion-label position="floating">
       Enter your username (5 chars min)
@@ -17,6 +20,6 @@
 <ion-content *ngIf="showAccessButton">
   <ion-list>
     <ion-list-header>Welcome {{name}}</ion-list-header>
-    <ion-button> ACCESS CHAT</ion-button>
+    <ion-button [routerLink]="['/../../chat']" > ACCESS CHAT</ion-button>
   </ion-list>
 </ion-content>
