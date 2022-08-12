@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
-import {
-  signInAnonymously,
-  onAuthStateChanged,
-  updateProfile,
-} from 'firebase/auth';
+import { ChatService } from 'src/app/services/chat.service';
 import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
@@ -13,16 +8,24 @@ import { NavigationService } from 'src/app/services/navigation.service';
   styleUrls: ['./anon.page.scss'],
 })
 export class AnonPage implements OnInit {
-  constructor(public navigation : NavigationService) {}
+  constructor(
+    private chat: ChatService,
+    public navigation: NavigationService
+  ) {}
   name: string = '';
-  showAccessButton : boolean;
+  showAccessButton: boolean;
 
   ngOnInit() {
-    
+    this.showAccessButton = false;
   }
 
-  
-
-  
-  
+  getUser() {
+    return this.chat.getUser();
+  }
+  async setUserName() {
+    if (this.name.length >=  5) {
+      await this.chat.loginWithName(this.name);
+      this.showAccessButton = true;
+    }
+  }
 }

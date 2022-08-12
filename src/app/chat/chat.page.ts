@@ -2,41 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { signOut } from 'firebase/auth';
 import { signInAnonymously } from 'firebase/auth';
+import { NavigationService } from '../services/navigation.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.page.html',
   styleUrls: ['./chat.page.scss'],
 })
 export class ChatPage implements OnInit {
-  constructor(private auth: Auth) {}
+  constructor(private auth: Auth, public navigation: NavigationService) {}
 
   async ngOnInit() {
-    if (this.auth.currentUser != null) {
-      console.log("already signed in: " + this.auth.currentUser.uid);
-      
-    } 
-    else {
-     await signInAnonymously(this.auth)
-        .then((userCredential) => {
-          // Signed in
-          console.log("signed in: " + this.auth.currentUser.uid);
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // ..
-        });
+    const user = this.auth.currentUser;
+    if (user != null) {
+      console.log(
+        'in chat already logged in, name: ' +
+          user.displayName +
+          ' uid: ' +
+          user.uid
+      );
     }
-
   }
 
   async logout() {
-    await signOut(this.auth).then(() => {
-      // Sign-out successful.
-      console.log("signed out");
-      
-    }).catch((error) => {
-      // An error happened.
-    });;
+    await signOut(this.auth)
+      .then(() => {
+        // Sign-out successful.
+        console.log('signed out');
+        this.navigation.goHome()
+      })
+      .catch((error) => {
+        // An error happened.
+      });
   }
 }

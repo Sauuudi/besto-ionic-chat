@@ -25,4 +25,8 @@ export class NavigationService {
       this.router.navigateByUrl("/")
     }
   }
+  public goHome(){
+    this.history = [];
+    this.router.navigateByUrl("/")
+  }
 }
