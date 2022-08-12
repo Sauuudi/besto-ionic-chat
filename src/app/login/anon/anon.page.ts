@@ -20,11 +20,11 @@ export class AnonPage implements OnInit {
   }
 
   getUser() {
-    return this.chat.getUser();
+    return this.chat.getCurrentUser();
   }
   async setUserName() {
     if (this.name.length >=  5) {
-      await this.chat.loginWithName(this.name);
+      await this.chat.loginAnonWithName(this.name);
       this.showAccessButton = true;
     }
   }

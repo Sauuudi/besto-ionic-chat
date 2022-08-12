@@ -2,9 +2,28 @@
   <ion-toolbar>
     <ion-title>chat</ion-title>
     <ion-button (click)="logout()" >SIGN OUT</ion-button>
+    <ion-button (click)="sendMessage()" >SEND</ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-label position="floating">
+    Write your message
+  </ion-label>
+  <ion-input minlength="1" [(ngModel)]="messageToSend"></ion-input>
 </ion-content>
+
+ <!-- <ion-content> 
+  <ion-grid>
+    <ion-row  *ngFor="let message of messages | async">
+      <ion-col size="9" [offset]="message.myMsg ? 3 : 0"
+      [ngClass]="{'my-message': message.myMsg, 'other-message': !message.myMsg }">
+      <b>{{message.fromName}}</b>
+      <span>{{message.msg}}</span>
+      <div class="time ion-text-rigth" ><br>{{message.createdAt?.toMillis() | date: 'short'}}</div>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content> -->
