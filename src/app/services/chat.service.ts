@@ -146,25 +146,12 @@ export class ChatService {
         fromName: this.auth.currentUser.displayName,
         createdAt: serverTimestamp(),
       }
-
     );
   }
 
   getRoomChatMessages(room: string) {
     const q = query(collection(this.store, 'rooms/' + room + '/messages'));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const messages = [];
-      querySnapshot.forEach((doc) => {
-        doc.data()
-        messages.push(doc.data());
-      });
-      messages.sort()
-      for(let m of messages){
-        console.log(m.fromName + ": " + m.msg+ " at: " + m.createdAt);
-        
-      }
-    });
-    
+    return q;
   }
 
   async getDbUsers() {
@@ -173,7 +160,7 @@ export class ChatService {
     //  console.log(querySnapshot);
 
     querySnapshot.forEach((doc) => {
-      users.push(doc.id + "=>" + doc.data());
+      users.push(doc.id + '=>' + doc.data());
     });
 
     return users;
@@ -183,5 +170,6 @@ export class ChatService {
     const unsub = onSnapshot(collection(this.store, 'users'), (doc) => {
       console.log('Current user collection: ', doc.docs);
     });
+    //tal vez mirar changes
   }
 }
