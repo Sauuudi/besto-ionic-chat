@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
 import { getDocs, onSnapshot } from '@angular/fire/firestore';
 import { signOut } from 'firebase/auth';
 import { signInAnonymously } from 'firebase/auth';
 import { Observable, timer } from 'rxjs';
-import { ChatService, Message } from '../services/chat.service';
-import { NavigationService } from '../services/navigation.service';
+import { ChatService, Message } from '../../services/chat.service';
+import { NavigationService } from '../../services/navigation.service';
 import { ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
 
@@ -16,15 +16,17 @@ import { IonContent } from '@ionic/angular';
 })
 export class ChatPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
-  room: any = '1';
-  messageToSend: string = '';
-  messagesToShow: any[] = [];
+  room: any;
+  messageToSend = '';
+  messagesToShow = [];
   userUid;
   firstTime = true;
 
   constructor(private cs: ChatService, public navigation: NavigationService) {}
 
   async ngOnInit() {
+    //this.messagesToShow = [];
+    this.room = this.navigation.getUrl().slice(-3).replace(/\D/g, "");
     const user = this.cs.getCurrentUser();
     this.userUid = user.uid;
     if (user != null) {
@@ -55,18 +57,6 @@ export class ChatPage implements OnInit {
         });
       });
     });
-  }
-
-  async logout() {
-    await this.cs
-      .logout()
-      .then(() => {
-        // Sign-out successful.
-        this.navigation.goHome();
-      })
-      .catch((error) => {
-        // An error happened.
-      });
   }
 
   sendMessage() {

@@ -5,6 +5,7 @@ import {
   signInAnonymously,
   updateProfile,
   onAuthStateChanged,
+  idToken,
 } from '@angular/fire/auth';
 import {
   FieldValue,
@@ -18,7 +19,6 @@ import {
   getDocs,
   query,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
 
 export interface Message {
   id: string;
@@ -40,7 +40,9 @@ export class ChatService {
     //this.getRoomChatMessages("1");
   }
 
-  async login() {
+  //LOGIN PART
+
+  async loginAnon() {
     await signInAnonymously(this.auth)
       .then((userCredential) => {
         // Signed in
@@ -53,24 +55,23 @@ export class ChatService {
       });
   }
 
-  logout() {
+  async logout() {
     var uid = this.auth.currentUser.uid;
-    return signOut(this.auth)
-      .then(() => {
-        // Sign-out successful.
-        this.deleteUserInStore(uid);
-        console.log('signed out');
-      })
-      .catch((error) => {
-        // An error happened.
-        console.log('error while signing out: ' + error);
-      });
+    try {
+      await signOut(this.auth);
+      // Sign-out successful.
+      this.deleteUserInStore(uid);
+      console.log('signed out');
+    } catch (error) {
+      // An error happened.
+      console.log('error while signing out: ' + error);
+    }
   }
 
   async loginAnonWithName(name: string) {
     if (name.length < 5) {
     } else {
-      await this.login();
+      await this.loginAnon();
       await updateProfile(this.auth.currentUser, {
         displayName: name,
       })
@@ -133,6 +134,21 @@ export class ChatService {
       });
   }
 
+  //saca los user de la firestore
+  async getDbUsers() {
+    let users = [];
+    const querySnapshot = await getDocs(collection(this.store, 'users'));
+    //  console.log(querySnapshot);
+
+    querySnapshot.forEach((doc) => {
+      users.push(doc.id + '=>' + doc.data());
+    });
+
+    return users;
+  }
+
+  //MESSAGES PART
+  //el id es el numeor del mensaje, saca el size de la coleccion para saber el id del nuevo mensaje a enviar y lo envia
   async addMessageToRoomChat(room: string, msg: string) {
     var id = (
       await getDocs(collection(this.store, 'rooms/' + room + '/messages'))
@@ -148,24 +164,31 @@ export class ChatService {
       }
     );
   }
-
+  //saca todos los mensajes de una room
   getRoomChatMessages(room: string) {
     const q = query(collection(this.store, 'rooms/' + room + '/messages'));
     return q;
   }
 
-  async getDbUsers() {
-    let users = [];
-    const querySnapshot = await getDocs(collection(this.store, 'users'));
-    //  console.log(querySnapshot);
-
-    querySnapshot.forEach((doc) => {
-      users.push(doc.id + '=>' + doc.data());
-    });
-
-    return users;
+  //saca todas las salas que existen
+  async getAllRooms() {
+    const querySnapshot = await getDocs(collection(this.store, 'rooms/'));
+    return querySnapshot;
   }
 
+  //crea una sala
+  //id es el numero de sala
+  //saaca el size de la colecion de rooms para saber el id de la nueva sala
+
+  async createNewRoom(n: string) {
+    var i = (await getDocs(collection(this.store, 'rooms'))).size;
+    await setDoc(doc(this.store, 'rooms', (i + 1).toString()), {
+      id: i+1,
+      name: n,
+    });
+  }
+
+  //nuse
   dbUsersObserver() {
     const unsub = onSnapshot(collection(this.store, 'users'), (doc) => {
       console.log('Current user collection: ', doc.docs);

@@ -13,6 +13,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./anon/anon.module').then((m) => m.AnonPageModule),
   },
+  {
+    path: 'mail',
+    loadChildren: () =>
+      import('./mail/mail.module').then((m) => m.MailPageModule),
+  },
 ];
 
 @NgModule({

@@ -1,0 +1,24 @@
+<ion-content>
+  <ion-row *ngFor="let message of messagesToShow">
+    <ion-col
+      size="9"
+      [offset]="(message.from == userUid) ? 3 : 0"
+      [ngClass]="{'my-message': message.uid == userUid, 'other-message': !message.uid == userUid }"
+    >
+      <span
+        ><b> {{message.fromName}} -- </b>
+        {{message.msg}} -- {{message.createdAt?.toMillis() | date: 'short'}}
+      </span>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer >
+  <ion-list>
+    <ion-label position="floating"> Write your message </ion-label>
+    <ion-row>
+      <ion-input minlength="1" [(ngModel)]="messageToSend"></ion-input>
+      <ion-button (click)="sendMessage()">SEND</ion-button>
+    </ion-row>
+  </ion-list>
+</ion-footer>

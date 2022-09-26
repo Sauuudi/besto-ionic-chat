@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ChatService } from './services/chat.service';
 import { NavigationService } from './services/navigation.service';
 @Component({
   selector: 'app-root',
@@ -6,7 +7,9 @@ import { NavigationService } from './services/navigation.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  constructor(public navigation : NavigationService) {
-    this.navigation.startSaveHistory()
+  constructor(private cs: ChatService, public navigation: NavigationService) {
+    this.navigation.startSaveHistory();
   }
+
+  
 }

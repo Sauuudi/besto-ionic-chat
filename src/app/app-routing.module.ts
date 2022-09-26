@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { redirectUnauthorizedTo, redirectLoggedInTo, canActivate } from '@angular/fire/auth-guard'
 
-const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login'])
-const redirectLoggedInToChat = () => redirectLoggedInTo(['chat'])
+
+const redirectLoggedInToChat = () => redirectLoggedInTo(['rooms'])
 
 const routes: Routes = [
   {
@@ -24,9 +24,8 @@ const routes: Routes = [
       
   },
   {
-    path: 'chat',
-    loadChildren: () => import('./chat/chat.module').then( m => m.ChatPageModule),
-    ...canActivate(redirectUnauthorizedToLogin)
+    path: 'rooms',
+    loadChildren: () => import('./rooms/rooms.module').then( m => m.RoomsPageModule)
   },
 ];
 

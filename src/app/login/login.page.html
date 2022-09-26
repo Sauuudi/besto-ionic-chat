@@ -1,11 +1,17 @@
-<ion-header>
-  <ion-title>BESTO CHAT</ion-title>
-</ion-header>
 
 <ion-content>
-  <ion-button (click)="navigation.goBack()" >Back </ion-button>
-  <ion-list>
+  <ion-item>
     <ion-title>SELECT LOGIN TYPE</ion-title>
-    <ion-button [routerLink]="['anon']" >ENTER ANONYMOUSLY </ion-button>
+  </ion-item>
+  <ion-list lines="none">
+    <ion-item>
+      <ion-button [routerLink]="['anon']">ENTER ANONYMOUSLY </ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-button [routerLink]="['mail']">ENTER USING MAIL</ion-button>
+    </ion-item>
+    <ion-item>
+      <h4>MAS FORMAS DE LOGIN??</h4>
+    </ion-item>
   </ion-list>
 </ion-content>

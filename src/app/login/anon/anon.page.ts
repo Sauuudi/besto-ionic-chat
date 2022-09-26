@@ -18,10 +18,6 @@ export class AnonPage implements OnInit {
   ngOnInit() {
     this.showAccessButton = false;
   }
-
-  getUser() {
-    return this.chat.getCurrentUser();
-  }
   async setUserName() {
     if (this.name.length >=  5) {
       await this.chat.loginAnonWithName(this.name);

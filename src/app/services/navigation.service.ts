@@ -29,4 +29,8 @@ export class NavigationService {
     this.history = [];
     this.router.navigateByUrl("/")
   }
+
+  public getUrl(){
+    return this.router.url;
+  }
 }
