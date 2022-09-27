@@ -9,7 +9,8 @@ const routes: Routes = [
   {
     path: '',
     title: 'Rooms',
-    component: RoomsPage
+    component: RoomsPage,
+    ...canActivate(redirectUnauthorizedToLogin)
   },
   {
     path: 'chat/:id',

@@ -1,9 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { onSnapshot } from '@angular/fire/firestore';
+import { ActivatedRoute } from '@angular/router';
 import { IonModal } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { ChatService } from '../services/chat.service';
-import { NavigationService } from '../services/navigation.service';
+import { HeaderService } from '../services/header.service';
 
 @Component({
   selector: 'app-rooms',
@@ -14,7 +15,18 @@ export class RoomsPage implements OnInit {
   @ViewChild(IonModal) modal: IonModal;
   newRoomName = '';
   rooms: any[] = [];
-  constructor(private cs: ChatService, public navigation: NavigationService) {}
+  constructor(
+    private cs: ChatService,
+    private hs: HeaderService,
+    private route: ActivatedRoute
+  ) {
+    //esto lo ponemos para que cuando vuelva de una room a rooms se llamen a
+    //estas funciones ya qeu con back, el ngoninit no se ejecuta otra vez
+    route.params.subscribe((val) => {
+      this.hs.setHref('/home');
+      this.hs.setTitle('Rooms');
+    });
+  }
 
   ngOnInit() {
     this.getRooms();
@@ -34,7 +46,7 @@ export class RoomsPage implements OnInit {
       .logout()
       .then(() => {
         // Sign-out successful.
-        this.navigation.goHome();
+        //put go home
       })
       .catch((error) => {
         // An error happened.

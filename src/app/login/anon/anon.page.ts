@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
-import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'app-anon',
@@ -9,8 +8,7 @@ import { NavigationService } from 'src/app/services/navigation.service';
 })
 export class AnonPage implements OnInit {
   constructor(
-    private chat: ChatService,
-    public navigation: NavigationService
+    private chat: ChatService
   ) {}
   name: string = '';
   showAccessButton: boolean;

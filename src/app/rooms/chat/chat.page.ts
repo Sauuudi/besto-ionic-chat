@@ -1,13 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Auth } from '@angular/fire/auth';
 import { getDocs, onSnapshot } from '@angular/fire/firestore';
-import { signOut } from 'firebase/auth';
-import { signInAnonymously } from 'firebase/auth';
-import { Observable, timer } from 'rxjs';
 import { ChatService, Message } from '../../services/chat.service';
-import { NavigationService } from '../../services/navigation.service';
 import { ViewChild } from '@angular/core';
 import { IonContent } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { HeaderService } from 'src/app/services/header.service';
 
 @Component({
   selector: 'app-chat',
@@ -20,13 +17,14 @@ export class ChatPage implements OnInit {
   messageToSend = '';
   messagesToShow = [];
   userUid;
-  firstTime = true;
 
-  constructor(private cs: ChatService, public navigation: NavigationService) {}
+  constructor(private cs: ChatService, private route : Router, private hs : HeaderService) {}
 
   async ngOnInit() {
-    //this.messagesToShow = [];
-    this.room = this.navigation.getUrl().slice(-3).replace(/\D/g, "");
+
+    this.hs.setHref('rooms')
+    this.room = this.route.url.slice(-3).replace(/\D/g, '');
+    this.hs.setTitle('room - ' + this.room )
     const user = this.cs.getCurrentUser();
     this.userUid = user.uid;
     if (user != null) {
@@ -37,7 +35,7 @@ export class ChatPage implements OnInit {
 
     const roomMessages = this.cs.getRoomChatMessages(this.room);
 
-    const unsubscribe = onSnapshot(roomMessages, (querySnapshot) => {
+    const messagesObs = onSnapshot(roomMessages, (querySnapshot) => {
       querySnapshot.docChanges().forEach((change) => {
         if (change.type === 'added' && change.doc.data().createdAt != null) {
           //console.log('New messages: ', change.doc.data());
@@ -57,17 +55,15 @@ export class ChatPage implements OnInit {
         });
       });
     });
+
+    
   }
 
   sendMessage() {
     if (this.messageToSend != '') {
-      this.cs
-        .addMessageToRoomChat(this.room, this.messageToSend)
-        .then((result) => {
-          this.messageToSend = '';
-          const numbers = timer(400);
-          numbers.subscribe(() => this.content.scrollToBottom());
-        });
+      this.cs.addMessageToRoomChat(this.room, this.messageToSend).then(() => {
+        this.messageToSend = '';
+      });
     }
   }
 }
